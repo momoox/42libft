@@ -6,32 +6,96 @@
 /*   By: mgeisler <mgeisler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 15:31:58 by mgeisler          #+#    #+#             */
-/*   Updated: 2022/12/05 16:54:24 by mgeisler         ###   ########.fr       */
+/*   Updated: 2022/12/14 17:59:46 by mgeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int count(int i, int j, char const *s)
+size_t count(char const *s, char c)
 {
-	i = 0;
-	j = 0;
+	size_t	i;
+	size_t	words;
 
+	i = 0;
+	words = 0;
 	while (s[i])
 	{
-		if (s[i] == " ")
-			j++;
+		if (s[i] != c)
+			words++;
 		i++;
 	}
-	return (j);
+	return (words);
 }
 
-
-
-char **ft_split(char const *s, char c)
+size_t lenword(const char *s, size_t i, char c)
 {
-	char str;
-	str = malloc(sizeof(char) * ft_strlen(s));
+	size_t	len;
+
+	len = 0;
+	while (s[i] == c)
+		i++;
+	while (s[i] != c && s[i])
+	{
+		len++;
+		i++;
+	}
+	return (len);
+}
+
+char	*cpyword(const char *s, size_t *i, char c, size_t len)
+{
+	char 	*str;
+	size_t 	u;
+
+	u = 0;
+	while (s[*i] == c)
+		(*i)++;
+	str = malloc(sizeof(char) * (len + 1));
 	if (!str)
-		return (NULL);	
+		return (NULL);
+	while (len)
+	{
+		str[u++] = s[(*i)++];
+		len--;
+	}
+	str[u] = '\0';
+	return (str);
+}
+
+char	**freeall(char **tab, size_t indice)
+{
+	size_t j;
+
+	j = 0;
+	while (j <= indice)
+	{
+		free(tab[j]);
+		j++;
+	}
+	free(tab);
+	return (NULL);
+}
+
+char	**ft_split(const char *s, char c)
+{
+	size_t		i;
+	size_t		j;
+	char	**tab;
+
+	i = 0;
+	j = 0;
+	if (!s)
+		return (0);
+	tab = malloc(sizeof(char *) * count(s, c) + 1);
+	if (!tab)
+		return (0);
+	while (j < count(s, c))
+	{
+		tab[j++] = cpyword(s, &i, c, lenword(s, i, c));
+		if (!tab[j])
+			return (freeall(tab, j));
+		j++;
+	}
+	return (tab);
 }
