@@ -1,35 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcat.c                                       :+:      :+:    :+:   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgeisler <mgeisler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/12 20:00:26 by mgeisler          #+#    #+#             */
-/*   Updated: 2022/12/15 16:59:47 by mgeisler         ###   ########.fr       */
+/*   Created: 2022/12/15 17:15:36 by mgeisler          #+#    #+#             */
+/*   Updated: 2022/12/15 18:54:02 by mgeisler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-// + j car on connait pas la size donc on est sur que ca sera la bonne taille
-size_t	ft_strlcat(char *dest, const char *src, size_t size)
+int	len(int n)
 {
-	size_t	i;
-	size_t	j;
+	int	i;
 
 	i = 0;
-	j = 0;
-	if (size == 0)
-		return (ft_strlen(src));
-	while ((dest[i]) && (i < size))
-		i++;
-	while ((src[j]) && (i + j + 1 < size))
+	while (n != 0)
 	{
-		dest[i + j] = src[j];
-		j++;
+		i++;
+		n--;
 	}
-	if (i < size)
-		dest[i + j] = '\0';
-	return (i + ft_strlen(src));
+	return (i);
+}
+
+char	*ft_itoa(int n)
+{
+	char	*str;
+	int		nb;
+	int		i;
+
+	nb = 0;
+	i = 0;
+	str = malloc(sizeof(char) * len(n) + 1);
+	if (!str)
+		return(NULL);
+	if (n < 0)
+	{
+		nb *= -1;
+		str[0] = '-';
+	}
+	while (n != 0)
+		str[i] = n;
+	return (str);
 }
